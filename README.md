@@ -3,6 +3,8 @@
 
 This small Windows batch file removes selected sound entries from EQ Legends so the game does not load or play those sounds.
 
+Download it from here: https://github.com/aodgizmo/EverQuest_Legends_SoundModifier/blob/main/RemoveAnnoyingSounds.bat
+
 It currently disables:
 
 | File entry | Sound |
