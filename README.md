@@ -15,6 +15,7 @@ It currently disables:
 | `4624^dog_atk.wav^` | Dog barking while attacking |
 | `355^Wolf_Att.wav^` | Wolf-form barking while attacking |
 | `566^wolf_dire_atk.wav^` | Dire wolf attack sound |
+| `351^WereWAtt.wav^` | Werewolf attack sound |
 
 ## Important: when to run the file
 
@@ -27,7 +28,7 @@ The correct order is:
 3. Click **PLAY**.
 4. Wait until the server-selection screen appears.
 5. Run `RemoveAnnoyingSounds.bat`.
-6. When it says `Done`, press any key to close the black window.
+6. Review the list of sounds it removed, then press any key to close the black window.
 7. Select your server and enter the game.
 
 You must repeat these steps each time the patcher restores the file.
@@ -65,15 +66,23 @@ The real batch file must remain beside `soundassets.txt`.
 
 ## How the batch file works
 
-The batch file starts the PowerShell program already included with Windows. PowerShell opens `soundassets.txt`, removes every line listed in `$r`, and saves the file again.
+The batch file starts the PowerShell program already included with Windows. PowerShell opens `soundassets.txt`, removes every entry found in the sound list, and saves the file again.
 
 This is the sound-removal list inside the batch file:
 
-```powershell
-$r=@('143^thunder1.wav^','144^thunder2.wav^','159^rainloop.wav^','4624^dog_atk.wav^','566^wolf_dire_atk.wav^','355^Wolf_Att.wav^')
+```text
+:SOUND_LIST
+143^thunder1.wav^
+144^thunder2.wav^
+159^rainloop.wav^
+4624^dog_atk.wav^
+566^wolf_dire_atk.wav^
+355^Wolf_Att.wav^
+351^WereWAtt.wav^
+:END_SOUND_LIST
 ```
 
-Each item between quotation marks is one complete line that will be removed from `soundassets.txt`.
+Every line between `:SOUND_LIST` and `:END_SOUND_LIST` is one complete entry that will be removed from `soundassets.txt`. The lines can be copied and pasted directly without changing them.
 
 ## Add another sound to the removal list
 
@@ -85,10 +94,9 @@ Then:
 2. Copy the entire line exactly, including its number and `^` characters.
 3. Right-click `RemoveAnnoyingSounds.bat`.
 4. Click **Edit**. On Windows 11, you may need to click **Show more options** first.
-5. Find the section beginning with `$r=@(`.
-6. Add a comma after the previous item.
-7. Put the new complete sound entry between single quotation marks.
-8. Save the file.
+5. Find the section between `:SOUND_LIST` and `:END_SOUND_LIST`.
+6. Paste the copied line anywhere inside that section, on its own line.
+7. Save the file.
 
 For example, suppose this is the sound entry you want to remove:
 
@@ -96,25 +104,23 @@ For example, suppose this is the sound entry you want to remove:
 999^example.wav^
 ```
 
-Change this:
+Paste that exact line into the list:
 
-```powershell
-$r=@('143^thunder1.wav^','144^thunder2.wav^')
-```
-
-Into this:
-
-```powershell
-$r=@('143^thunder1.wav^','144^thunder2.wav^','999^example.wav^')
+```text
+:SOUND_LIST
+143^thunder1.wav^
+144^thunder2.wav^
+999^example.wav^
+:END_SOUND_LIST
 ```
 
 Important rules:
 
-- Keep every entry inside single quotation marks: `'entry'`
-- Put a comma between entries.
-- Do not put a comma after the final entry.
 - Copy the complete line from `soundassets.txt`.
+- Paste each sound entry on a separate line.
+- Paste entries only between `:SOUND_LIST` and `:END_SOUND_LIST`.
 - Keep the `^` characters.
+- Do not add quotation marks, commas, `set`, or anything else.
 - Do not add backslashes before underscores. Use `dog_atk.wav`, not `dog\_atk.wav`.
 
 The removal is based on an exact full-line match. If the number, filename, or punctuation does not match the line in `soundassets.txt`, that sound will not be removed.
@@ -124,23 +130,29 @@ The removal is based on an exact full-line match. If the number, filename, or pu
 To allow one of the sounds again:
 
 1. Right-click `RemoveAnnoyingSounds.bat` and click **Edit**.
-2. Find that sound entry in the `$r=@(...)` list.
-3. Delete the complete quoted entry.
-4. Also remove the nearby comma so the remaining items still have exactly one comma between them.
-5. Save the batch file.
-6. Run the EQ Legends patcher again so it restores the original `soundassets.txt`.
-7. After clicking **PLAY**, run the edited batch file.
+2. Find that sound entry between `:SOUND_LIST` and `:END_SOUND_LIST`.
+3. Delete the complete line for that sound.
+4. Save the batch file.
+5. Run the EQ Legends patcher again so it restores the original `soundassets.txt`.
+6. After clicking **PLAY**, run the edited batch file.
 
 Example before removing an item:
 
-```powershell
-$r=@('143^thunder1.wav^','144^thunder2.wav^','159^rainloop.wav^')
+```text
+:SOUND_LIST
+143^thunder1.wav^
+144^thunder2.wav^
+159^rainloop.wav^
+:END_SOUND_LIST
 ```
 
 Example after allowing `rainloop.wav` again:
 
-```powershell
-$r=@('143^thunder1.wav^','144^thunder2.wav^')
+```text
+:SOUND_LIST
+143^thunder1.wav^
+144^thunder2.wav^
+:END_SOUND_LIST
 ```
 
 Simply removing an entry from the batch file does not immediately restore it to an already-edited `soundassets.txt`. Letting the patcher restore the original file is what puts the sound entry back.
